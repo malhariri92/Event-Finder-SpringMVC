@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Events</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <link th:href = "@{/webjars/font-awesome/css/all.min.css}" rel="stylesheet">
+</head>
+<body>
+<div th:replace="header :: header"></div>
+<div th:if="${session.user}">
+    <h1 th:text="'Welecome back, ' + ${session.user.firstName}"/>
+    <div class="container-fluid">
+        <div th:if="${session.user.events != null}" class="row">
+            <div th:each="event : ${session.user.events}" class="col-sm-2 d-flex justify-content-center mb-s mt-2">
+                <div class="card" style="width: 20rem;">
+                    <img class="card-img-top" th:src="${event.performers.get(0).imageUrl}" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${event.title}"/>
+                        <p class="card-text" th:text="${type}"/>
+                        <p th:text="${event.getFormattedDateTime()}"/>
+
+                        <a th:href="@{/details/{id}(id=${event.id})}">Event Details</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h3 th:if="${session.user.events == null || session.user.events.isEmpty()}">
+            You do not have any saved events!
+        </h3>
+        <a th:href="@{/home}" class="btn btn-info mt-3">All Events</a>
+    </div>
+</div>
+
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<header class="navbar navbar-dark bg-primary sticky-top">
+    <div class="container-fluid">
+        <h1 class="navbar-brand mb-0">Event Finder - Powered by <a href="https://seatgeek.com/" target="_blank">
+            <img th:src="@{/images/SeatGeek.svg}" al="SeatGeek Logo" style="max-height:50px;"/></a></h1>
+        <form th:if="${categories != null}" class="d-flex navbar-brand mb-0" role="search" action="/home" method="get">
+            <input th:value="${query}" class="form-control me-2" style="min-width: 500px;"
+                   type="search" name="query" placeholder="Search" aria-label="Search">
+            <button class="btn btn-success me-5 btn-lg" type="submit">Search</button>
+
+            <select name="selectedCategory" id="category" class="form-select" onchange="this.form.submit()">
+                <option th:each="category : ${categories}" th:value="${category}" th:text="${category}"
+                        th:selected="${category == selectedCategory}"/>
+            </select>
+        </form>
+
+        <div navbar-brand class="dropdown">
+            <button class="btn btn-warning dropdown-toggle btn-lg" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="fa-solid fa-user"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                <li th:if="${session.user == null}"><a class="dropdown-item" th:href="@{/login}">Login</a></li>
+                <li th:if="${session.user}"><a class="dropdown-item" th:href="@{/profile}">Saved Events</a></li>
+                <li th:if="${session.user}"><hr class="dropdown-divider"></li>
+                <li th:if="${session.user}">
+                    <a class="dropdown-item" href="#">
+                        <form action="#" th:action="@{/logout}"
+                              method="POST">
+                            <input class="btn btn-danger" type="submit" value="Logout"/>
+                        </form>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</header>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Event Finder</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <link th:href = "@{/webjars/font-awesome/css/all.min.css}" rel="stylesheet">
+</head>
+<body>
+<div th:replace="header :: header"></div>
+<div class="container-fluid">
+        <div th:if="${events != null}" class="row">
+            <div th:each="event : ${events}" class="col-sm-2 d-flex justify-content-center mb-s mt-2">
+                <div class="card" style="width: 20rem;">
+                    <img class="card-img-top" th:src="${event.performers.get(0).imageUrl}" alt="Card image cap">
+                     <div class="card-body">
+                        <h5 class="card-title" th:text="${event.title}"/>
+                        <p class="card-text" th:text="${type}"/>
+                         <p th:text="${event.getFormattedDateTime()}"/>
+
+                         <a th:href="@{/details/{id}(id=${event.id})}">Event Details</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <h3 th:if="${events == null || events.isEmpty()}">Sorry! There are no events that meet your search criteria.</h3>
+</div>
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

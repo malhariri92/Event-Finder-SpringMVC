@@ -1,0 +1,25 @@
+.heart-container {
+    position: relative;
+    display: inline-block;
+}
+
+.expand-on-hover:hover .hover-text {
+    animation: slideIn 0.5s forwards;
+}
+
+.hover-text {
+    color: black;
+    position: absolute;
+    top: 45%;
+    left: 50px;
+    transform: translate(100%, -50%) scaleX(0);
+    white-space: nowrap;
+    opacity: 0;
+}
+
+@keyframes slideIn {
+    to {
+        opacity: 1;
+        transform: translate(0, -50%) scaleX(1);
+    }
+}

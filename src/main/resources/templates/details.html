@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Details </title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <link th:href = "@{/webjars/font-awesome/css/all.min.css}" rel="stylesheet">
+    <link th:href = "@{/css/style.css}" rel="stylesheet">
+
+</head>
+<body>
+<div th:replace="header :: header"></div>
+<div th:if="event != null" class="container mt-5">
+    <h1 th:text="${event.title}" class="text-center"/>
+    <div class="card">
+        <div class="row g-0">
+            <!-- Left Column: Event Details -->
+            <div class="col-md-6">
+                <div class="card-body">
+                    <h1 class="card-title" th:text="${event.performers.get(0).name}"></h1>
+                    <p class="card-text" th:text="${event.type.toUpperCase()}"></p>
+                    <p class="card-text" th:text="'Date & Time: ' + ${event.getFormattedDateTime()}"/>
+                    <p class="card-text" th:text="'Location: ' + ${event.venue.address} + ', ' +
+                            ${event.venue.extendedAddress}"/>
+                    <div class="d-flex align-items-center">
+
+                        <a th:if="${event.dateTime} gt ${#temporals.createNow()}"
+                           th:href="${event.performers.get(0).ticketUrl}"
+                           target="_blank" class="btn btn-success">Get Tickets From SeatGeek</a>
+
+                        <div th:if="${session.user}" class="ms-3" style="cursor: pointer;">
+                            <form
+                                    th:action="@{/saveEvent}" method="get" id="saveEventForm">
+                                <input type="hidden" th:name="eventId" th:value="${event.id}" />
+                                <span class="heart-container">
+                                    <span class="fa-heart fa-3x expand-on-hover"
+                                          th:classappend="${session.user.hasEvent(event.id) ?
+                                                'fa-solid text-danger' : 'fa-regular'}"
+                                          onclick="submitForm()">
+                                        <span class="hover-text fs-3"
+                                              th:text="${session.user.hasEvent(event.id) ? 'Remove' : 'Save'}"/>
+                                    </span>
+                                </span>
+                            </form>
+                        </div>
+                    </div>
+
+
+                    <div th:if="${event.dateTime} lt ${#temporals.createNow()}">
+                        <h3>Expired!</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Event Image -->
+            <div class="col-md-6 d-flex justify-content-center">
+                <img th:src="${event.performers.get(0).imageUrl}" class="img-fluid rounded"
+                     alt="Event Image" style="min-height:450px;">
+            </div>
+        </div>
+    </div>
+</div>
+<div th:if="event == null" class="text-center">
+    <h3>This event is no longer available!</h3>
+</div>
+
+<script th:inline="javascript">
+                        function submitForm() {
+                            document.getElementById('saveEventForm').submit();
+                        }
+</script>
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
